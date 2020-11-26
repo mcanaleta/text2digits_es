@@ -23,6 +23,6 @@ assert '30003' == text2num('tres hectareas y tres centiareas')
 assert 'de 205871.01 EUROS de' == text2num('de DOSCIENTOS CINCO MIL OCHOCIENTOS SETENTA Y UN EUROS CON UN CENTIMO de')
 ```
 
-## Contrubute
+## Contribute
 
 All contributions all welcome!, fell free to make pull requests.
