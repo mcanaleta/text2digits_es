@@ -211,7 +211,7 @@ def text2num(msg=""):
         tmp = current + tmp
         new_str = '%s %s' % (new_str, tmp)
         # _query_cache(cache, text_number, tmp)
-    elif new_str == '' and not tmp is '':
+    elif new_str == '' and tmp != '':
         new_str = '%s %s' % (new_str, tmp) if tmp else ''
         # _query_cache(cache, text_number, tmp)
 

@@ -6,13 +6,14 @@ from setuptools import setup
 _here = os.path.abspath(os.path.dirname(__file__))
 
 version = {}
-with open(os.path.join(_here, 'w2n', 'version.py')) as f:
+with open(os.path.join(_here, 'text2digits_es', 'version.py')) as f:
     exec(f.read(), version)
 
 setup(
-    name='w2n',
+    name='text2digits_es',
     version=version['__version__'],
-    description=('Convert spanish number text to its numerical representation.'),
+    description=(
+        'Convert spanish number text to its numerical representation.'),
     author='Alejandro Alcalde',
     author_email='algui91@gmail.com',
     url='https://github.com/elbaulp/text2digits_es',
