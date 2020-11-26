@@ -11,6 +11,7 @@ with open(os.path.join(_here, 'text2digits_es', 'version.py')) as f:
 
 setup(
     name='text2digits_es',
+    packages=['text2digits_es'],  # this must be the same as the name above
     version=version['__version__'],
     description=(
         'Convert spanish number text to its numerical representation.'),
