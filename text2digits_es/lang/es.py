@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 units = {
     'cero': 0,
     'uno': 1,
