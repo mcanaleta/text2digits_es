@@ -21,16 +21,14 @@ def test_translate():
     assert 'ghjghjg hj con fecha 26 DE JUNIO DEL AÑO 2013 en Granada' == text2digits(
         'ghjghjg hj con fecha VEINTISÉIS DE JUNIO DEL AÑO DOS MIL TRECE en Granada')
     assert 'para responder de 1.250.000 euros de principal; intereses ordinarios durante' == text2digits(
-        'para responder de 1.250.000 euros de principal; intereses ordinarios durante'
-    )
+        'para responder de 1.250.000 euros de principal; intereses ordinarios durante')
     assert 'de 31.224,16 Euros y demas' == text2digits(
         'de 31.224,16 Euros y demas')
     assert 'con fecha 22 de Diciembre de 2010' == text2digits(
         'con fecha veintidós de Diciembre de dos mil diez')
     assert '30003' == text2digits('tres hectareas y tres centiareas')
-    assert 'de 205871.01 EUROS de' == \
-        text2digits(
-            'de DOSCIENTOS CINCO MIL OCHOCIENTOS SETENTA Y UN EUROS CON UN CENTIMO de')
+    assert 'de 205871.01 EUROS de' == text2digits(
+        'de DOSCIENTOS CINCO MIL OCHOCIENTOS SETENTA Y UN EUROS CON UN CENTIMO de')
 
 
 def test_ordinals():
@@ -45,7 +43,3 @@ def test_avos():
     assert 'una 9.0909  parte' == text2digits('una once/ava parte')
     assert 'una 9.0909  parte' == text2digits('una once/avo parte')
     assert 'una 9.0909  parte nava' == text2digits('una once/avo parte nava')
-
-
-if __name__ == '__main__':
-    unittest.main()

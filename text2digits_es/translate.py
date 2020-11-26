@@ -38,11 +38,11 @@ def is_number(x):
     :param x: word to test
     :return: True if it is a number, false elsewhere
     """
-    if type(x) == str:
+    if isinstance(x, str):
         x = x.replace(',', '')
     try:
         float(x)
-    except:
+    except BaseException:
         return False
     return True
 
@@ -187,7 +187,7 @@ def text2digits(msg=""):
                         i = 0
                     else:
                         i = 1
-                elif i == 1 and not wl in scales:
+                elif i == 1 and wl not in scales:
                     new_str = new_str[:-1] + prev_w + ' ' + w
                     i = 0
                     prev_was_one = False
