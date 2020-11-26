@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-import locale
 import logging as log
 import re
 import string
@@ -12,7 +9,6 @@ from .lang.es import separator
 from .lang.es import units
 
 log = log.getLogger(__name__)
-locale.setlocale(locale.LC_ALL, 'es-es')
 
 
 def is_avo(w=""):
