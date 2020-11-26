@@ -5,16 +5,15 @@ import logging as log
 import re
 import string
 
-import coloredlogs
 
-from lang.es import numwords
-from lang.es import scales
-from lang.es import separator
-from lang.es import units
+from .lang.es import numwords
+from .lang.es import scales
+from .lang.es import separator
+from .lang.es import units
 
-coloredlogs.install(level='INFO')
 log = log.getLogger(__name__)
 locale.setlocale(locale.LC_ALL, 'es-es')
+
 
 def is_avo(w=""):
     """
@@ -96,14 +95,15 @@ def _sum_numbers(p: str, msg: str) -> str:
         (ix, iix) = match.span()
         for g in match.groups():
             decimal += float(g)
-        msg = '%s %s %s %s' % (msg[:ix], decimal, 'METROS' if 'metros' in p else 'euros', msg[iix:])
+        msg = '%s %s %s %s' % (
+            msg[:ix], decimal, 'METROS' if 'metros' in p else 'euros', msg[iix:])
 
         match = re.search(p, msg, flags=re.I)
 
     return msg
 
 
-def text2num(msg=""):
+def text2digits(msg=""):
     """
     Transforms every number written in text with its numerical representation
 
@@ -123,10 +123,11 @@ def text2num(msg=""):
     tmp = 0
     scale_str = ''
     text_number = ''
+    f = ""
 
-    detect_ones = (('un', 'una', 'uno'), ('hectarea', 'hectárea', 'metro', 'decimetro', 'euro', 'centimo', 'peseta'))
+    detect_ones = (('un', 'una', 'uno'), ('hectarea', 'hectárea',
+                                          'metro', 'decimetro', 'euro', 'centimo', 'peseta'))
     i = 0
-    acc = ''
 
     msg = msg.replace('%', ' PORCENTAJE')
     msg = re.sub(' +', ' ', msg)
@@ -154,9 +155,11 @@ def text2num(msg=""):
                     else:
                         new_str = ' '.join([new_str, w])
                 else:
-                    tmp = result + current + tmp + (decimal / 100 if decimal else 0)
+                    tmp = result + current + tmp + \
+                        (decimal / 100 if decimal else 0)
                     resultStr = str(tmp) if tmp else ''
-                    resultStr = '%s %s' % (resultStr, scale_str) if scale_str else resultStr
+                    resultStr = '%s %s' % (
+                        resultStr, scale_str) if scale_str else resultStr
                     scale_str = ''
                     new_str = ' '.join([new_str, resultStr, w])
                     # if text_number:
@@ -169,7 +172,8 @@ def text2num(msg=""):
             if indecimal and wl in numwords:
                 if wl in scales:
                     scale_str = w if scale_str == '' else scale_str
-                    decimal = decimal * .1 if wl in ('decímetros', 'decimetros') and decimal < 10 else decimal * .01
+                    decimal = decimal * .1 if wl in (
+                        'decímetros', 'decimetros') and decimal < 10 else decimal * .01
                     current += decimal
                     decimal = 0
                     indecimal = False
@@ -198,7 +202,8 @@ def text2num(msg=""):
                     prev_was_one = False
                     text_number = '%s %s' % (text_number, wl)
             elif wl in scales:
-                current = current + tmp * scales[wl] if tmp else current + scales[wl]
+                current = current + tmp * \
+                    scales[wl] if tmp else current + scales[wl]
                 tmp = 0
                 text_number = '%s %s' % (text_number, wl)
             else:
@@ -226,47 +231,3 @@ def text2num(msg=""):
     new_str = re.sub(r'euros? +de +euros?', 'euros', new_str)
 
     return re.sub(' +', ' ', new_str.strip())
-
-
-if __name__ == '__main__':
-    def test_translate():
-        assert '99 PORCENTAJE' == text2num('99%')
-        assert '9' == text2num('nueve')
-        assert '2013' == text2num('dos mil trece')
-        assert 'tengo 2 caballos' == text2num('tengo dos caballos')
-        assert 'tengo 2000 casas' == text2num('tengo dos mil casas')
-        assert 'unas 2405 propiedades' == text2num('unas dos mil cuatrocientas cinco propiedades')
-        assert 'tengo 1800 vinos' == text2num('tengo mil ochocientos vinos')
-        assert '1200000 cosas y 3 casas' == text2num('Un millón doscientas mil cosas y tres casas')
-        assert '125000 cosas y 3 casas' == text2num('ciento veinticinco mil cosas y tres casas')
-        assert '124.3 decimetros, tambien tengo' == text2num(
-            'ciento veinticuatro con treinta decimetros, tambien tengo')
-        # assert '124.3 metros tambien  tengo' == text2num('ciento veinticuatro metros treinta decimetros, tambien tengo')
-        assert 'ghjghjg hj con fecha 26 DE JUNIO DEL AÑO 2013 en Granada' == text2num(
-            'ghjghjg hj con fecha VEINTISÉIS DE JUNIO DEL AÑO DOS MIL TRECE en Granada')
-        assert 'para responder de 1.250.000 euros de principal; intereses ordinarios durante' == text2num(
-            'para responder de 1.250.000 euros de principal; intereses ordinarios durante'
-        )
-        assert 'de 31.224,16 Euros y demas' == text2num(
-            'de 31.224,16 Euros y demas')
-        assert 'con fecha 22 de Diciembre de 2010' == text2num('con fecha veintidós de Diciembre de dos mil diez')
-        assert '30003' == text2num('tres hectareas y tres centiareas')
-        assert 'de 205871.01 EUROS de' == \
-               text2num('de DOSCIENTOS CINCO MIL OCHOCIENTOS SETENTA Y UN EUROS CON UN CENTIMO de')
-
-
-    def test_ordinals():
-        assert '47 es 47 aniversario' == text2num('47 es cuadragésimo séptimo aniversario')
-        assert '692a es 692 (o para aniversarios: 92 del 6 centenario)' == text2num(
-            '692a es sexcentésima nonagésima segunda (o para aniversarios: nonagésimo segundo del sexto centenario)')
-
-
-    def test_avos():
-        assert 'una 9.0909  parte' == text2num('una once/ava parte')
-        assert 'una 9.0909  parte' == text2num('una once/avo parte')
-        assert 'una 9.0909  parte nava' == text2num('una once/avo parte nava')
-
-
-    test_translate()
-    test_ordinals()
-    # test_avos()
